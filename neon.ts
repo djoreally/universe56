@@ -6,7 +6,7 @@ export default defineConfig({
     realtime: true,
   },
   auth: true,
-  aiGateway: true,
+  // aiGateway: true,  // PAUSED 2026-11-05: Neon Free plan refuses to apply aiGateway (deploy error). The gateway endpoint + token already exist in .env.local and the app uses them directly; re-enable this line after the plan upgrade and re-run neon deploy.
   functions: {
     hello: { name: "Hello World", source: "./hello.ts" },
     reach: { name: "Reach", source: "./functions/reach.ts" },
