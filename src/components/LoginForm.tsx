@@ -67,6 +67,34 @@ export default function LoginForm({ authBase }: { authBase: string }) {
     setBusy(false);
   }
 
+  async function forgotPassword() {
+    setMsg("");
+    setOkMsg("");
+    if (!email) {
+      setMsg("Type your email above first, then tap Forgot password.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch(`${authBase}/request-password-reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, redirectTo: `${window.location.origin}/reset-password` }),
+      });
+      let m = `HTTP ${res.status}`;
+      try {
+        const j = await res.json();
+        m = j?.message || m;
+      } catch { /* keep status */ }
+      if (res.ok) setOkMsg(m);
+      else setMsg(`Reset request failed: ${m}`);
+    } catch {
+      setMsg("Could not reach the auth service from the browser.");
+    }
+    setBusy(false);
+  }
+
   const toggleBtn = (active: boolean): React.CSSProperties => ({
     flex: 1,
     borderRadius: 12,
@@ -119,6 +147,11 @@ export default function LoginForm({ authBase }: { authBase: string }) {
         </button>
         {okMsg ? <p className="ok">{okMsg}</p> : null}
         {msg ? <p className="warn">{msg}</p> : null}
+        {mode === "signin" ? (
+          <button type="button" className="bigbtn" style={{ marginTop: 16 }} onClick={forgotPassword} disabled={busy}>
+            Forgot password — email me a reset link
+          </button>
+        ) : null}
       </form>
 
       {mode === "signin" ? (
