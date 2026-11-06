@@ -1,2 +1,10 @@
 import AppPage from "@/components/AppPage";
-export default function Page() { return <AppPage app="studio" />; }
+import StudioPodcast from "@/components/StudioPodcast";
+export default function Page() {
+  return (
+    <>
+      <AppPage app="studio" />
+      <StudioPodcast />
+    </>
+  );
+}
